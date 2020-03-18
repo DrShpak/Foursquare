@@ -7,8 +7,14 @@ import xmlSaver.XML;
 @XML
 public class Place {
     private Coordinates coordinates;
+    @XML
     private String name;
+    @XML
     private Type type;
+
+    @SuppressWarnings("unused")
+    public Place() {
+    }
 
     public Place(String name, Type type, Coordinates coordinates) {
         this.coordinates = coordinates;

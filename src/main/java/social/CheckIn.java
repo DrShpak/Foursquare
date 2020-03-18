@@ -7,9 +7,16 @@ import java.util.Date;
 
 @XML
 public class CheckIn {
+    @XML
     private Place place;
+    @XML
     private User user;
+    @XML
     private Date date;
+
+    @SuppressWarnings("unused")
+    public CheckIn() {
+    }
 
     public CheckIn(Place place, User user, Date date) {
         this.place = place;

@@ -12,6 +12,10 @@ public class Coordinates {
         this.y =y;
     }
 
+    @SuppressWarnings("unused")
+    public Coordinates() {
+    }
+
     public double getX() {
         return x;
     }

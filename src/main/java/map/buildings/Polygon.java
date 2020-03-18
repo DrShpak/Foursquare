@@ -8,7 +8,9 @@ import java.util.List;
 @XML
 public class Polygon extends Type {
 
+    @XML
     private List<Point> points;
+    @XML
     private List<Edge> edges;
 
     public Polygon(ArrayList<Point> points) {
@@ -21,7 +23,10 @@ public class Polygon extends Type {
         edges.add(new Edge(points.get(points.size() - 1), p1));
     }
 
-    //@SuppressWarnings("unused")
+    @SuppressWarnings("unused")
+    public Polygon() {
+    }
+
     @Override
     public boolean isInside(Point p) {
         return getCountOfIntersections(p) % 2 != 0 || isOnBorder(p);

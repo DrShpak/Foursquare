@@ -4,19 +4,25 @@ import xmlSaver.XML;
 
 @XML
 public class Point extends Type {
+    @XML
     double x;
+    @XML
     double y;
+
+    @SuppressWarnings("unused")
+    public Point() {
+    }
 
     public Point(double x, double y) {
         this.x = x;
         this.y = y;
     }
 
-    public double getX() {
+    double getX() {
         return x;
     }
 
-    public double getY() {
+    double getY() {
         return y;
     }
 

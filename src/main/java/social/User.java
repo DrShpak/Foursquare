@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @XML
-public class User {
+public class User implements Runnable {
     @XML
     private List<Place> visitedPlaces;
     @XML
@@ -23,12 +23,18 @@ public class User {
     @XML
     private Coordinates coordinates;
 
+    private boolean isAlive = true;
+
     @XML
     @SuppressWarnings("FieldCanBeLocal")
     private String name;
 
     @XML
     private int id;
+
+    @SuppressWarnings("unused")
+    public User() {
+    }
 
     public User(String name) {
         visitedPlaces = new ArrayList<>();
@@ -40,10 +46,6 @@ public class User {
     }
 
     public void checkIn(Map map, Coordinates coordinates) {
-//        var currPlace = map.getPlaces().stream().
-//            filter(x -> x.getCoordinates().equals(this.coordinates)).
-//            findAny().orElse(null);
-
         var currPlaces = map.getPlaces().stream().
             filter(x -> x.getType().isInside(new Point(coordinates.getX(), coordinates.getY()))).
             collect(Collectors.toList());
@@ -62,9 +64,24 @@ public class User {
             sentNotification(checkIn);
             addInLog(currPlace);
             System.out.println("Check-in has done successfully");
-        }
-        else
+        } else
             System.out.println("Here is no place to check-in!");
+    }
+
+    public void randomCheckIn(Map map, Coordinates coordinates) {
+        var currPlaces = map.getPlaces().stream().
+            filter(x -> x.getType().isInside(new Point(coordinates.getX(), coordinates.getY()))).
+            collect(Collectors.toList());
+
+        if (!currPlaces.isEmpty()) {
+            var input = new Random().nextInt(currPlaces.size());
+            var currPlace = currPlaces.get(input);
+            var checkIn = new CheckIn(currPlaces.get(input), this, new Date());
+            visitedPlaces.add(currPlace);
+            map.getCheckins().add(checkIn);
+            sentNotification(checkIn);
+            addInLog(currPlace);
+        }
     }
 
     private void sentNotification(CheckIn checkIn) {
@@ -108,6 +125,14 @@ public class User {
         return friends;
     }
 
+    public void setAlive(boolean flag) {
+        isAlive = flag;
+    }
+
+    public boolean isAlive() {
+        return isAlive;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -119,6 +144,16 @@ public class User {
 
     @Override
     public String toString() {
+        return name;
+    }
+
+    @Override
+    public void run() {
+        var random = new Random();
+
+    }
+
+    public String getName() {
         return name;
     }
 }

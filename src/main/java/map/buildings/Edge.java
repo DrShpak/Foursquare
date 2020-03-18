@@ -1,10 +1,19 @@
 package map.buildings;
 
+import xmlSaver.XML;
+
+@XML
 public class Edge extends Type {
+    @XML
     private Point p1;
+    @XML
     private Point p2;
 
-    public Edge(Point p1, Point p2) {
+    @SuppressWarnings("unused")
+    public Edge() {
+    }
+
+    Edge(Point p1, Point p2) {
         this.p1 = p1;
         this.p2 = p2;
     }
