@@ -125,10 +125,10 @@ public class ConsoleUI {
 //            System.out.println("hi there" + Thread.currentThread().isAlive());
             wake();
             if (countOfCheckIn >= 3) {
-                synchronized (this) {
+                synchronized (sync) {
                     try {
                         System.out.println("я туточки");
-                        wait();
+                        sync.wait();
                         //Thread.sleep(10000); // проснулся и немного ждет, расягиваем во времени жизнь юзера
                     } catch (InterruptedException e) {
                         System.out.println("Че-то с потоками" + e.getMessage());
@@ -149,6 +149,8 @@ public class ConsoleUI {
         }
     }
 
+    private static final Object sync = new Object();
+
     private synchronized void wake() {
 //        System.out.println(Thread.currentThread().toString());
         Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
@@ -159,8 +161,8 @@ public class ConsoleUI {
             filter(x -> x.getName().equals("main")).
             findAny().orElse(null);
         assert mainThread != null;
-            synchronized (mainThread) {
-                mainThread.notifyAll();
+            synchronized (sync) {
+                sync.notifyAll();
             }
     }
 }
