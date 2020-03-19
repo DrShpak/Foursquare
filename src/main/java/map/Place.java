@@ -1,6 +1,5 @@
 package map;
 
-import map.buildings.Polygon;
 import map.buildings.Type;
 import xmlSaver.XML;
 
@@ -14,12 +13,6 @@ public class Place {
 
     @SuppressWarnings("unused")
     public Place() {
-    }
-
-    public Place(String name, Type type, Coordinates coordinates) {
-        this.coordinates = coordinates;
-        this.type = type;
-        this.name = name;
     }
 
     public Place(String name, Type type) {

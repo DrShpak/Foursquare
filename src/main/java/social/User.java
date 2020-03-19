@@ -11,9 +11,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @XML
-public class User implements Runnable {
-    @XML
-    private List<Place> visitedPlaces;
+public class User {
     @XML
     private List<User> friends;
     @XML
@@ -37,7 +35,6 @@ public class User implements Runnable {
     }
 
     public User(String name) {
-        visitedPlaces = new ArrayList<>();
         friends = new ArrayList<>();
         log = new ArrayList<>();
         notifications = new ArrayList<>();
@@ -59,7 +56,6 @@ public class User implements Runnable {
             var input = scanner.nextInt();
             var currPlace = currPlaces.get(input - 1);
             var checkIn = new CheckIn(currPlaces.get(input - 1), this, new Date());
-            visitedPlaces.add(currPlace);
             map.getCheckins().add(checkIn);
             sentNotification(checkIn);
             addInLog(currPlace);
@@ -68,6 +64,7 @@ public class User implements Runnable {
             System.out.println("Here is no place to check-in!");
     }
 
+    //для юзеров, которые в роли отдельных поток сами делают чекины в фоне
     public void randomCheckIn(Map map, Coordinates coordinates) {
         var currPlaces = map.getPlaces().stream().
             filter(x -> x.getType().isInside(new Point(coordinates.getX(), coordinates.getY()))).
@@ -77,7 +74,6 @@ public class User implements Runnable {
             var input = new Random().nextInt(currPlaces.size());
             var currPlace = currPlaces.get(input);
             var checkIn = new CheckIn(currPlaces.get(input), this, new Date());
-            visitedPlaces.add(currPlace);
             map.getCheckins().add(checkIn);
             sentNotification(checkIn);
             addInLog(currPlace);
@@ -107,10 +103,6 @@ public class User implements Runnable {
 
     public void setCoordinates(Coordinates coordinates) {
         this.coordinates = coordinates;
-    }
-
-    public List<Place> getVisitedPlaces() {
-        return visitedPlaces;
     }
 
     public List<Pair<Place, String>> getLog() {
@@ -145,12 +137,6 @@ public class User implements Runnable {
     @Override
     public String toString() {
         return name;
-    }
-
-    @Override
-    public void run() {
-        var random = new Random();
-
     }
 
     public String getName() {

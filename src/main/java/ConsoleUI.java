@@ -7,7 +7,11 @@ import xmlSaver.XmlDeserializer;
 import xmlSaver.XmlSerializer;
 import xmlSaver.XmlSerializerRegistry;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @XML
 public class ConsoleUI {
@@ -17,11 +21,20 @@ public class ConsoleUI {
     @XML
     private List<User> users = new ArrayList<>();
     @XML
-    private List<String> randomNames = new ArrayList<>(Arrays.asList("Jim", "Lola", "Kent"));
+    private ArrayList<String> randomNames;
+
+    {
+        try {
+            randomNames = new ArrayList<>(Arrays.asList(Files.readAllLines(Paths.get("src/main/java/names.txt")).toString().split(" ")));
+        } catch (IOException e) {
+            System.out.println("Something went wrong..." + e.getMessage());
+        }
+    }
+
     @XML
     private java.util.Map<Thread, User> threads = new HashMap<>();
 
-    private Thread currThread;
+    //private Thread currThread; //костыль видимо, нужен чтобы запоминать текущий поток, чтоб потом его там сохарнить в список
 
     private static final XmlSerializerRegistry registry;
 
@@ -65,8 +78,6 @@ public class ConsoleUI {
             var input = scan.nextLine();
             if (input.equals("1")) {
                 user1.checkIn(map, user1.getCoordinates());
-//                System.out.println("\n" + user1.getLog().toString());
-//                System.out.println(user2.getNotifications().toString());
             }
             if (input.equals("2"))
                 XmlSerializer.saveXml(this, "test.xml", registry);
@@ -78,7 +89,7 @@ public class ConsoleUI {
                 var t = new Thread(this::live);
                 t.start();
                 threads.put(t, null);
-                currThread = t;
+                //currThread = t;
             }
             if (input.equals("6")) {
                 users.forEach(System.out::println);
@@ -99,19 +110,71 @@ public class ConsoleUI {
     }
 
     private void live() {
+        var lifeCycle = System.nanoTime();
+        var countOfCheckIn = 0;
         var random = new Random();
         var user = new User(randomNames.get(random.nextInt(randomNames.size())));
         user.setCoordinates(new Coordinates(random.nextInt(3), random.nextInt(3)));
         users.add(user);
-        threads.put(currThread, user); //overwrite value
+        threads.put(Thread.currentThread(), user); //overwrite value
         while (user.isAlive()) {
+            if (TimeUnit.SECONDS.convert(System.nanoTime() - lifeCycle, TimeUnit.NANOSECONDS) >= 120) {
+                user.setAlive(false);
+            }
+
+            var activeThreads = new Thread[Thread.activeCount()];
+            Thread.enumerate(activeThreads);
+            Thread mainThread = Arrays.stream(activeThreads).
+                filter(x -> x.getName().equals("main")).
+                findAny().orElse(null);
+            assert mainThread != null;
+            synchronized (mainThread) {
+                try {
+                    mainThread.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            System.out.println("hi there" + Thread.currentThread().isAlive());
+            wake();
+            if (countOfCheckIn >= 3) {
+                synchronized (this) {
+                    try {
+                        System.out.println("я туточки");
+                        wait();
+                        Thread.sleep(10000); // проснулся и немного ждет, расягиваем во времени жизнь юзера
+                    } catch (InterruptedException e) {
+                        System.out.println("Че-то с потоками" + e.getMessage());
+                    }
+                }
+                countOfCheckIn = 0;
+            }
+
             try {
-                Thread.sleep(7000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            System.out.println("прошел через огонь и медные трубы");
             user.randomCheckIn(map, user.getCoordinates());
             user.setCoordinates(new Coordinates(random.nextInt(3), random.nextInt(3)));
+            countOfCheckIn++;
         }
+    }
+
+    private synchronized void wake() {
+//        System.out.println(Thread.currentThread().toString());
+        Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+        threadSet.forEach(x -> System.out.println(x.toString()));
+        var activeThreads = new Thread[Thread.activeCount()];
+        Thread.enumerate(activeThreads);
+        Thread mainThread = Arrays.stream(activeThreads).
+            filter(x -> x.getName().equals("main")).
+            findAny().orElse(null);
+        assert mainThread != null;
+            synchronized (mainThread) {
+                mainThread.notifyAll();
+            }
     }
 }

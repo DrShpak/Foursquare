@@ -18,7 +18,6 @@ public class Edge extends Type {
         this.p2 = p2;
     }
 
-
     boolean isOnEdge(Point p) {
         var crossProduct = (p.getY() - p1.getY()) * (p2.getX() - p1.getX()) - (p.getX() - p1.getX()) * (p2.getY() - p1.getY());
 
@@ -32,7 +31,6 @@ public class Edge extends Type {
         var squaredLengthBA = Math.pow((p2.getX() - p1.getX()), 2) + Math.pow((p2.getY() - p1.getY()), 2);
         return !(dotProduct > squaredLengthBA);
     }
-
 
     boolean checkIntersection(Point p3, Point p4) { //p1 p2 - точки ребра
         if (p1.x - p2.x == 0) {

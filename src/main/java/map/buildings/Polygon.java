@@ -7,14 +7,10 @@ import java.util.List;
 
 @XML
 public class Polygon extends Type {
-
-    @XML
-    private List<Point> points;
     @XML
     private List<Edge> edges;
 
     public Polygon(ArrayList<Point> points) {
-        this.points = points;
         this.edges = new ArrayList<>();
         var p1 = points.get(0);
         for (int i = 0; i < points.size() - 1; i++) {

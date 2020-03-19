@@ -19,8 +19,6 @@ public class Map {
     private List<Place> places;
     @XML
     private List<CheckIn> checkins;
-    @XML
-    private List<User> users;
 
     public Map() {
         this.places = new ArrayList<>();
@@ -33,7 +31,6 @@ public class Map {
         places.add(new Place("Парк \"Динамо\"",
             new Polygon(new ArrayList<>(Arrays.asList(new Point(5, 5), new Point(15, 40), new Point(40, 5))))));
         this.checkins = new ArrayList<>();
-        this.users = new ArrayList<>();
     }
 
     //для графики
