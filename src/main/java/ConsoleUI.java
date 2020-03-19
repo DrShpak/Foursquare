@@ -122,28 +122,14 @@ public class ConsoleUI {
                 user.setAlive(false);
             }
 
-            var activeThreads = new Thread[Thread.activeCount()];
-            Thread.enumerate(activeThreads);
-            Thread mainThread = Arrays.stream(activeThreads).
-                filter(x -> x.getName().equals("main")).
-                findAny().orElse(null);
-            assert mainThread != null;
-            synchronized (mainThread) {
-                try {
-                    mainThread.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            System.out.println("hi there" + Thread.currentThread().isAlive());
+//            System.out.println("hi there" + Thread.currentThread().isAlive());
             wake();
             if (countOfCheckIn >= 3) {
                 synchronized (this) {
                     try {
                         System.out.println("я туточки");
                         wait();
-                        Thread.sleep(10000); // проснулся и немного ждет, расягиваем во времени жизнь юзера
+                        //Thread.sleep(10000); // проснулся и немного ждет, расягиваем во времени жизнь юзера
                     } catch (InterruptedException e) {
                         System.out.println("Че-то с потоками" + e.getMessage());
                     }
@@ -166,7 +152,7 @@ public class ConsoleUI {
     private synchronized void wake() {
 //        System.out.println(Thread.currentThread().toString());
         Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-        threadSet.forEach(x -> System.out.println(x.toString()));
+//        threadSet.forEach(x -> System.out.println(x.toString()));
         var activeThreads = new Thread[Thread.activeCount()];
         Thread.enumerate(activeThreads);
         Thread mainThread = Arrays.stream(activeThreads).
