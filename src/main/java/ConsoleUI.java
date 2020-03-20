@@ -118,7 +118,7 @@ public class ConsoleUI {
         users.add(user);
         threads.put(Thread.currentThread(), user); //overwrite value
         while (user.isAlive()) {
-            if (TimeUnit.SECONDS.convert(System.nanoTime() - lifeCycle, TimeUnit.NANOSECONDS) >= 120) {
+            if (TimeUnit.SECONDS.convert(System.nanoTime() - lifeCycle, TimeUnit.NANOSECONDS) >= 30) {
                 user.setAlive(false);
             }
 
@@ -129,7 +129,7 @@ public class ConsoleUI {
                     try {
                         System.out.println("я туточки");
                         sync.wait();
-                        //Thread.sleep(10000); // проснулся и немного ждет, расягиваем во времени жизнь юзера
+                        Thread.sleep(3000); // проснулся и немного ждет, расягиваем во времени жизнь юзера
                     } catch (InterruptedException e) {
                         System.out.println("Че-то с потоками" + e.getMessage());
                     }
@@ -142,7 +142,7 @@ public class ConsoleUI {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("прошел через огонь и медные трубы");
+//            System.out.println("прошел через огонь и медные трубы");
             user.randomCheckIn(map, user.getCoordinates());
             user.setCoordinates(new Coordinates(random.nextInt(3), random.nextInt(3)));
             countOfCheckIn++;
@@ -162,7 +162,7 @@ public class ConsoleUI {
             findAny().orElse(null);
         assert mainThread != null;
             synchronized (sync) {
-                sync.notifyAll();
+                sync.notify();
             }
     }
 }
