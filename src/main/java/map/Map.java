@@ -25,7 +25,7 @@ public class Map {
         places.add(new Place("Red square", new Point(1, 1)));
         places.add(new Place("Воробевы Горы", new Point(2, 2)));
         places.add(new Place("Площадь Ленина", new Point(1, 2)));
-        places.add(new Place("Гей туровский", new Point(2, 1)));
+        places.add(new Place("Сам такой ((( ", new Point(2, 1)));
         places.add(new Place("Кинотеатр \"Дружба\"",
             new Polygon(new ArrayList<>(Arrays.asList(new Point(10, 10), new Point(15, 15), new Point(20, 10))))));
         places.add(new Place("Парк \"Динамо\"",
