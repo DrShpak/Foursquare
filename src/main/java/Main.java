@@ -8,6 +8,7 @@ import java.util.Scanner;
 @XML
 public class Main {
     private static void run_ui(ConsoleUI ui) {
+        ui.users.add(ui.user1);
         ui.user2.addFriend(ui.user1);
         ui.user1.setCoordinates(new Coordinates(20, 10));
         var scanner = new Scanner(System.in);
@@ -32,7 +33,7 @@ public class Main {
                 }
                 case "7" -> ui.users.forEach(x -> {
                     System.out.println(x.getName() + "'s log:");
-                    x.getLog().forEach(System.out::println);
+                    x.getLog().forEach(y -> System.out.println(y.getValue0() + " " + y.getValue1()));
                     System.out.println("\n");
                 });
                 default -> System.out.println("usage:(1|2|3|4|5|6|7)");

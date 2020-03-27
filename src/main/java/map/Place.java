@@ -5,7 +5,7 @@ import xmlSaver.XML;
 
 @XML
 public class Place {
-    private Coordinates coordinates;
+//    private Coordinates coordinates;
     @XML
     private String name;
     @XML
@@ -20,13 +20,13 @@ public class Place {
         this.type = type;
     }
 
-    public Coordinates getCoordinates() {
-        return coordinates;
-    }
+//    public Coordinates getCoordinates() {
+//        return coordinates;
+//    }
 
-    public void setCoordinates(Coordinates coordinates) {
-        this.coordinates = coordinates;
-    }
+//    public void setCoordinates(Coordinates coordinates) {
+//        this.coordinates = coordinates;
+//    }
 
     public String getName() {
         return name;

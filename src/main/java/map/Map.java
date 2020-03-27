@@ -18,7 +18,7 @@ public class Map {
     @XML
     private List<Place> places;
     @XML
-    private List<CheckIn> checkins;
+    private List<CheckIn> checkins; //история всех чекинов на карте
 
     public Map() {
         this.places = new ArrayList<>();

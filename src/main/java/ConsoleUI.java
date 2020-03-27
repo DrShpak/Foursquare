@@ -3,8 +3,6 @@ import map.Map;
 import org.javatuples.Pair;
 import social.User;
 import xmlSaver.XML;
-import xmlSaver.XmlDeserializer;
-import xmlSaver.XmlSerializer;
 import xmlSaver.XmlSerializerRegistry;
 
 import java.io.IOException;
@@ -30,8 +28,6 @@ public class ConsoleUI {
             System.out.println("Something went wrong..." + e.getMessage());
         }
     }
-
-    //private Thread currThread; //костыль видимо, нужен чтобы запоминать текущий поток, чтоб потом его там сохарнить в список
 
     public static final XmlSerializerRegistry registry;
 
@@ -79,12 +75,10 @@ public class ConsoleUI {
                 user.setAlive(false);
             }
 
-//            System.out.println("hi there" + Thread.currentThread().isAlive());
             wake();
             if (countOfCheckIn >= 3) {
                 synchronized (sync) {
                     try {
-                        System.out.println("я туточки");
                         sync.wait();
                         Thread.sleep(3000); // проснулся и немного ждет, расягиваем во времени жизнь юзера
                     } catch (InterruptedException e) {
@@ -95,11 +89,10 @@ public class ConsoleUI {
             }
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(4000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-//            System.out.println("прошел через огонь и медные трубы");
             user.randomCheckIn(map, user.getCoordinates());
             user.setCoordinates(new Coordinates(random.nextInt(3), random.nextInt(3)));
             countOfCheckIn++;
@@ -109,15 +102,6 @@ public class ConsoleUI {
     private static final Object sync = new Object();
 
     private synchronized void wake() {
-//        System.out.println(Thread.currentThread().toString());
-        Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-//        threadSet.forEach(x -> System.out.println(x.toString()));
-        var activeThreads = new Thread[Thread.activeCount()];
-        Thread.enumerate(activeThreads);
-        Thread mainThread = Arrays.stream(activeThreads).
-            filter(x -> x.getName().equals("main")).
-            findAny().orElse(null);
-        assert mainThread != null;
             synchronized (sync) {
                 sync.notify();
             }
