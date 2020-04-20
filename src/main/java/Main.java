@@ -3,6 +3,8 @@ import xmlSaver.XML;
 import xmlSaver.XmlDeserializer;
 import xmlSaver.XmlSerializer;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 @XML
@@ -18,7 +20,18 @@ public class Main {
                 case "2" -> XmlSerializer.saveXml(ui, "test.xml", ConsoleUI.registry);
                 case "3" -> ui = (ConsoleUI) XmlDeserializer.loadXml("test.xml", ConsoleUI.registry);
                 case "4" -> {
-
+                    System.out.println("в дружбе");
+                    ui.getMap().getPeopleInThisPlace(ui.getMap().getPlaces().get(4)).forEach(x -> {
+                        System.out.println(x.getName() + "'s log:");
+                        x.getLog().forEach(y -> System.out.println(y.getValue0() + " " + y.getValue1()));
+                        System.out.println("\n");
+                    });
+                    System.out.println("в динамо");
+                    ui.getMap().getPeopleInThisPlace(ui.getMap().getPlaces().get(5)).forEach(x -> {
+                        System.out.println(x.getName() + "'s log:");
+                        x.getLog().forEach(y -> System.out.println(y.getValue0() + " " + y.getValue1()));
+                        System.out.println("\n");
+                    });
                 }
                 case "5" -> {
                     var t = new Thread(ui::live);
@@ -44,5 +57,7 @@ public class Main {
     public static void main(String[] args) {
         ConsoleUI c = new ConsoleUI();
         run_ui(c);
+//        List<Integer> list = new ArrayList<>();
+        System.out.println();
     }
 }

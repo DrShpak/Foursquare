@@ -71,7 +71,7 @@ public class ConsoleUI {
         user.setCoordinates(new Coordinates(random.nextInt(3), random.nextInt(3)));
         users.add(user);
         while (user.isAlive()) {
-            if (TimeUnit.SECONDS.convert(System.nanoTime() - lifeCycle, TimeUnit.NANOSECONDS) >= 30) {
+            if (TimeUnit.SECONDS.convert(System.nanoTime() - lifeCycle, TimeUnit.NANOSECONDS) >= 300) {
                 user.setAlive(false);
             }
 
@@ -94,7 +94,7 @@ public class ConsoleUI {
                 e.printStackTrace();
             }
             user.randomCheckIn(map, user.getCoordinates());
-            user.setCoordinates(new Coordinates(random.nextInt(3), random.nextInt(3)));
+            user.setCoordinates(new Coordinates(random.nextInt(3849) + 1, random.nextInt(2160) + 1));
             countOfCheckIn++;
         }
     }
@@ -105,5 +105,9 @@ public class ConsoleUI {
             synchronized (sync) {
                 sync.notify();
             }
+    }
+
+    public Map getMap() {
+        return map;
     }
 }

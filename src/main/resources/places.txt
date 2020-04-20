@@ -1,0 +1,2 @@
+Point: "test1" (1, 2)
+Polygon: "test2" ((1, 2), (3, 4))

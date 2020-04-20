@@ -109,14 +109,6 @@ public class User {
         return log;
     }
 
-    public List<String> getNotifications() {
-        return notifications;
-    }
-
-    public List<User> getFriends() {
-        return friends;
-    }
-
     public void setAlive(boolean flag) {
         isAlive = flag;
     }
