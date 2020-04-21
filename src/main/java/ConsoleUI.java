@@ -31,6 +31,12 @@ public class ConsoleUI {
 
     public static final XmlSerializerRegistry registry;
 
+    /*
+    для сериализации
+    так как юзается самописная либа, то она еще не может сериализовывать кастомные классы
+    здесь мы вручную показываем либе, как надо сериализовывать
+    в конкретном случае это класс "Пара"
+     */
     static {
         registry = new XmlSerializerRegistry();
         try {
@@ -63,6 +69,7 @@ public class ConsoleUI {
     @XML
     User user2 = new User("Medvedev");
 
+    // код, который выполняется потоками
     void live() {
         var lifeCycle = System.nanoTime();
         var countOfCheckIn = 0;
@@ -70,7 +77,7 @@ public class ConsoleUI {
         var user = new User(randomNames.get(random.nextInt(randomNames.size())));
         user.setCoordinates(new Coordinates(random.nextInt(3), random.nextInt(3)));
         users.add(user);
-        while (user.isAlive()) {
+        while (user.isAlive()) { // крутим цикл до тех пор, пока юзер жив
             if (TimeUnit.SECONDS.convert(System.nanoTime() - lifeCycle, TimeUnit.NANOSECONDS) >= 300) {
                 user.setAlive(false);
             }
@@ -93,14 +100,14 @@ public class ConsoleUI {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            user.randomCheckIn(map, user.getCoordinates());
-            user.setCoordinates(new Coordinates(random.nextInt(3849) + 1, random.nextInt(2160) + 1));
+            user.randomCheckIn(map, map.getPlaces().get(random.nextInt(map.getPlaces().size())));
             countOfCheckIn++;
         }
     }
 
     private static final Object sync = new Object();
 
+    // будим один из спящих потоков
     private synchronized void wake() {
             synchronized (sync) {
                 sync.notify();

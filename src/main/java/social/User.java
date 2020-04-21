@@ -42,42 +42,31 @@ public class User {
         this.id = new Random().nextInt(Integer.MAX_VALUE);
     }
 
+    // делаем чекин
     public void checkIn(Map map, Coordinates coordinates) {
         var currPlaces = map.getPlaces().stream().
             filter(x -> x.getType().isInside(new Point(coordinates.getX(), coordinates.getY()))).
             collect(Collectors.toList());
 
-
-        if (!currPlaces.isEmpty()) {
-            System.out.println("Выберите, где вы хотите зачикиниться: ");
-            int[] i = {1};
-            currPlaces.forEach(x -> System.out.println(i[0]++ + ". " + x.getName()));
-            var scanner = new Scanner(System.in);
-            var input = scanner.nextInt();
-            var currPlace = currPlaces.get(input - 1);
-            var checkIn = new CheckIn(currPlaces.get(input - 1), this, new Date());
-            map.getCheckins().add(checkIn);
-            sentNotification(checkIn);
-            addInLog(currPlace);
-            System.out.println("Check-in has done successfully");
-        } else
-            System.out.println("Here is no place to check-in!");
+        System.out.println("Выберите, где вы хотите зачикиниться: ");
+        int[] i = {1};
+        currPlaces.forEach(x -> System.out.println(i[0]++ + ". " + x.getName()));
+        var scanner = new Scanner(System.in);
+        var input = scanner.nextInt();
+        var currPlace = currPlaces.get(input - 1);
+        var checkIn = new CheckIn(currPlaces.get(input - 1), this, new Date());
+        map.getCheckins().add(checkIn);  // во все чекины добавляем текущий чекин
+        sentNotification(checkIn); // отправляем уведомления всем, кто на нас подписан (типо наши други)
+        addInLog(currPlace); // добавляем в общий лог юзера
+        System.out.println("Check-in has done successfully");
     }
 
     //для юзеров, которые в роли отдельных поток сами делают чекины в фоне
-    public void randomCheckIn(Map map, Coordinates coordinates) {
-        var currPlaces = map.getPlaces().stream().
-            filter(x -> x.getType().isInside(new Point(coordinates.getX(), coordinates.getY()))).
-            collect(Collectors.toList());
-
-        if (!currPlaces.isEmpty()) {
-            var input = new Random().nextInt(currPlaces.size());
-            var currPlace = currPlaces.get(input);
-            var checkIn = new CheckIn(currPlaces.get(input), this, new Date());
-            map.getCheckins().add(checkIn);
-            sentNotification(checkIn);
-            addInLog(currPlace);
-        }
+    public void randomCheckIn(Map map, Place place) {
+        var checkIn = new CheckIn(place, this, new Date()); // делаем чекин
+        map.getCheckins().add(checkIn); // получаем чекины
+        sentNotification(checkIn);
+        addInLog(place); // добавили в лог
     }
 
     private void sentNotification(CheckIn checkIn) {

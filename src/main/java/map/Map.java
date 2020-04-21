@@ -18,20 +18,15 @@ public class Map {
     @XML
     private List<Place> places;
     @XML
-    private List<CheckIn> checkins; //история всех чекинов на карте
+    private List<CheckIn> checkins; // история всех чекинов на карте
+
     @XML
-
-
     public Map() {
         places = new PlaceBuilder().buildPlaces();
-        places.add(new Place("Кинотеатр \"Дружба\"",
-            new Polygon(new ArrayList<>(Arrays.asList(new Point(10, 10), new Point(15, 15), new Point(20, 10))))));
-        places.add(new Place("Парк \"Динамо\"",
-            new Polygon(new ArrayList<>(Arrays.asList(new Point(5, 5), new Point(15, 40), new Point(40, 5))))));
         this.checkins = new ArrayList<>();
     }
 
-    //для графики
+    // показываем всех людей в данном конкретном месте (пришли в прак и смотри кто здесь отмечался последние 15 секунд)
     public List<User> getPeopleInThisPlace(Place place) {
         return this.checkins.stream().
             filter(x -> x.getPlace().equals(place)).

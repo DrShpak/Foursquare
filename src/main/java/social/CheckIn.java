@@ -14,6 +14,7 @@ public class CheckIn {
     @XML
     private Date date;
 
+    // чекин представляет из себя место, челика и дату чекина
     @SuppressWarnings("unused")
     public CheckIn() {
     }

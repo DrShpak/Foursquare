@@ -20,14 +20,6 @@ public class Place {
         this.type = type;
     }
 
-//    public Coordinates getCoordinates() {
-//        return coordinates;
-//    }
-
-//    public void setCoordinates(Coordinates coordinates) {
-//        this.coordinates = coordinates;
-//    }
-
     public String getName() {
         return name;
     }
